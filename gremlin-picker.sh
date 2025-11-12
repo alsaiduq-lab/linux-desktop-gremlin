@@ -1,21 +1,17 @@
 #!/bin/bash
-
 # an extremely simple gremlin picker using rofi
 
-# get the directory where this script is *actually* located (even if symlinked)
-SOURCE="${BASH_SOURCE[0]}"
-while [ -L "$SOURCE" ]; do
-	DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
-	SOURCE="$(readlink "$SOURCE")"
-	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+# move to script directory
+DIR=$( dirname $(realpath "$0") )
+cd $DIR
 
-# list all gremlins in spritesheet (relative to script dir)
-available_gremlins=$(command ls -1 "$SCRIPT_DIR/spritesheet" 2>/dev/null)
+# ensure uv can be found
+export PATH=$PATH:$HOME/.local/bin
+
+# list all gremlins in spritesheet
+available_gremlins=$(command ls -1 ./spritesheet 2>/dev/null)
 
 # use rofi to pick the selected gremlin
-
 main_menu() {
 	pick=$(echo -e "$available_gremlins\nExit" | rofi -dmenu)
 
@@ -26,15 +22,15 @@ main_menu() {
 	# check which session to launch (use uv)
 	if [[ $XDG_SESSION_TYPE == "wayland" ]]; then
 		if command -v uv >/dev/null 2>&1; then
-			"$SCRIPT_DIR/run-uv-xwayland.sh" "$pick"
+			./run-uv-xwayland.sh "$pick"
 		else
-			"$SCRIPT_DIR/run-xwayland.sh" "$pick"
+			./run-xwayland.sh "$pick"
 		fi
 	elif [[ $XDG_SESSION_TYPE == "x11" ]]; then
 		if command -v uv >/dev/null 2>&1; then
-			"$SCRIPT_DIR/run-uv-x11.sh" "$pick"
+			./run-uv-x11.sh "$pick"
 		else
-			"$SCRIPT_DIR/run-x11.sh" "$pick"
+			./run-x11.sh "$pick"
 		fi
 	fi
 }

@@ -35,9 +35,9 @@ else
 	echo "The gremlins need them :3"
 fi
 
-echo "=============================="
+echo "================================="
 echo " Linux Desktop Gremlin Installer"
-echo "=============================="
+echo "================================="
 echo
 echo "1) Install"
 echo "2) Uninstall"
