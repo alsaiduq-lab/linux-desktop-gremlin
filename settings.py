@@ -8,6 +8,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class State(Enum):
+    """
+    Defines the possible states of the gremlin.
+    At any given time, the gremlin can only be in one state.
+    """
     IDLE = auto()
     HOVER = auto()
     SLEEP = auto()
@@ -50,6 +54,20 @@ class EmoteConfig:
     EmoteDuration = 3600
 
 
+class SfxMap:
+    Hover = None
+    Intro = None
+    Outro = None
+    Grab = None
+    Walk = None
+    Poke = None
+    Pat = None
+    LeftAction = None
+    RightAction = None
+    Reload = None
+    Emote = None
+
+
 """
 The following classes should have been shared a trait or something similar.
 I'll implement such generalization later.
@@ -66,6 +84,7 @@ class SpriteMap:
     SideHotspotHeight = None
     SideHotspotWidth = None
     HasReloadAnimation = False
+
     Idle = None
     Hover = None
     Sleep = None

@@ -94,7 +94,7 @@ class GremlinWindow(QWidget):
 
         # --- @! Start -------------------------------------------------------------------
         self.setup_tray_icon()
-        self.play_sound("intro.wav")
+        self.play_sound(settings.SfxMap.Intro)
         self.master_timer.start(1000 // settings.SpriteMap.FrameRate)
         self.idle_timer.start(120 * 1000)
 
@@ -143,29 +143,29 @@ class GremlinWindow(QWidget):
         # --- @! handle state entry ------------------------------------------------------
         match new_state:
             case State.GRAB:
-                self.play_sound("grab.wav")
+                self.play_sound(settings.SfxMap.Grab)
             case State.WALK:
                 if self.current_state != State.WALK:
-                    self.play_sound("run.wav")
+                    self.play_sound(settings.SfxMap.Walk)
             case State.WALK_IDLE:
                 self.walk_idle_timer.start(2000)
             case State.POKE:
-                self.play_sound("mambo.wav")
+                self.play_sound(settings.SfxMap.Poke)
             case State.PAT:
-                self.play_sound("pat.wav")
+                self.play_sound(settings.SfxMap.Pat)
             case State.LEFT_ACTION:
                 if self.has_reload and self.ammo > 0:
-                    self.play_sound("fire.wav")
+                    self.play_sound(settings.SfxMap.LeftAction)
                     self.ammo -= 1
             case State.RIGHT_ACTION:
                 if self.has_reload and self.ammo > 0:
-                    self.play_sound("fire.wav")
+                    self.play_sound(settings.SfxMap.RightAction)
                     self.ammo -= 1
             case State.RELOAD:
-                self.play_sound("reload.wav")
+                self.play_sound(settings.SfxMap.Reload)
                 self.ammo = 6
             case State.EMOTE:
-                self.play_sound("emote.wav")
+                self.play_sound(settings.SfxMap.Emote)
                 emote_duration = settings.EmoteConfig.EmoteDuration
                 self.emote_duration_timer.start(emote_duration)
 
@@ -548,7 +548,7 @@ class GremlinWindow(QWidget):
             self.set_state(State.HOVER)
 
         if self.current_state not in [State.WALK, State.GRAB, State.SLEEP, State.POKE, State.EMOTE]:
-            self.play_sound("hover.wav", 3)
+            self.play_sound(settings.SfxMap.Hover, 3)
 
     def leaveEvent(self, event):
         self.clearFocus()
