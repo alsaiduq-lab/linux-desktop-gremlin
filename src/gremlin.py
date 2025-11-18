@@ -40,7 +40,7 @@ class GremlinWindow(QWidget):
         )
 
         # Set window title
-        self.setWindowTitle("Gremlins")
+        self.setWindowTitle("ilgwg_desktop_gremlins.py")
 
         # --- @! Main Sprite Display -----------------------------------------------------
         self.sprite_label = QLabel(self)
