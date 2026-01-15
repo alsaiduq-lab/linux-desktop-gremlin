@@ -21,6 +21,8 @@ https://github.com/user-attachments/assets/eeb75510-9725-4f3a-a259-0959ddc22603
 
 # Changelog
 
+- 2026-01-15: Refactored the entire codebase for modularity and strict type-check. Some behaviors have changed, some are intentional, some are bugs.
+- 2026-01-14: Added Qt6 character selector GUI! Huge thanks to [@Multex](https://github.com/Multex)!
 - 2025-11-18: Massive source code restructure! We now have a unified run script and a package recipe for Guix. (Huge thanks to [@thanosapollo](https://github.com/thanosapollo)! This chad is a much better programmer than I am.)
 - 2025-11-16: Added a manual trigger for the annoy emote. Press `P` to make them noisy on command.
 - 2025-11-15: Remapped headpats from Left Click to Right Click. No more accidental pats when you want to drag them around!
