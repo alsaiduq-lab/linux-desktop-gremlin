@@ -63,7 +63,9 @@ class TimerManager:
     """
 
     def start_passive_timer(self):
-        self.master_timer.start(1000 // SpriteProperties.FrameRate)
+        base_interval = 1000 // SpriteProperties.FrameRate
+        adjusted_interval = int(base_interval / Preferences.AnimationSpeed)
+        self.master_timer.start(max(1, adjusted_interval))
         self.reset_passive_timer()
 
     def reset_passive_timer(self):
