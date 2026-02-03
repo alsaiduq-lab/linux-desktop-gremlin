@@ -106,6 +106,8 @@ def _load_master_config(master_config: dict):
         "MoveSpeed",
         "Volume",
         "AudioDevice",
+        "Scale",
+        "AnimationSpeed",
         "EmoteKey",
         "EmoteKeyEnabled",
         "IdleMinutes",

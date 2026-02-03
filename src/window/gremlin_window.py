@@ -7,6 +7,7 @@ from ..fsm.animation_ticker import AnimationTicker
 from ..fsm.state_manager import StateManager
 from ..fsm.timer_manager import TimerManager
 from ..fsm.walk_manager import WalkManager
+from ..settings import Preferences
 from ..states import State
 from .hotspot_manager import HotspotManager
 from .hover_manager import HoverManager
@@ -26,10 +27,13 @@ class GremlinWindow(QWidget):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.setFixedSize(
-            resources.SpriteProperties.FrameWidth,
-            resources.SpriteProperties.FrameHeight,
-        )
+
+        # Apply scaling
+        self.scale = Preferences.Scale
+        self.scaled_width = int(resources.SpriteProperties.FrameWidth * self.scale)
+        self.scaled_height = int(resources.SpriteProperties.FrameHeight * self.scale)
+
+        self.setFixedSize(self.scaled_width, self.scaled_height)
         self.setWindowTitle("ilgwg_desktop_gremlins.py")
 
         # --- @! Main Sprite Display -----------------------------------------------------
@@ -37,8 +41,8 @@ class GremlinWindow(QWidget):
         self.sprite_label.setGeometry(
             0,
             0,
-            resources.SpriteProperties.FrameWidth,
-            resources.SpriteProperties.FrameHeight,
+            self.scaled_width,
+            self.scaled_height,
         )
         self.sprite_label.setScaledContents(True)
 

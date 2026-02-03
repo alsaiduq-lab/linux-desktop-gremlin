@@ -66,6 +66,18 @@ class SettingsDialog(QDialog):
         self.volume_spin.setSingleStep(0.1)
         self.volume_spin.setValue(self.config_data.get("Volume", 0.8))
 
+        self.scale_spin = QDoubleSpinBox()
+        self.scale_spin.setRange(0.1, 5.0)
+        self.scale_spin.setSingleStep(0.1)
+        self.scale_spin.setValue(self.config_data.get("Scale", 1.0))
+        self.scale_spin.setToolTip("Scale the gremlin size (e.g. 0.5 = half size, 2.0 = double size).")
+
+        self.anim_speed_spin = QDoubleSpinBox()
+        self.anim_speed_spin.setRange(0.1, 5.0)
+        self.anim_speed_spin.setSingleStep(0.1)
+        self.anim_speed_spin.setValue(self.config_data.get("AnimationSpeed", 1.0))
+        self.anim_speed_spin.setToolTip("Adjust animation playback speed (e.g. 0.5 = slower, 2.0 = faster).")
+
         # Add to form
         form_layout.addRow("Default Character:", self.starting_char_combo)
         form_layout.addRow("Enable System Tray:", self.systray_check)
@@ -73,6 +85,8 @@ class SettingsDialog(QDialog):
         form_layout.addRow("Emote Key (e.g., P):", self.emote_key_input)
         form_layout.addRow("Audio Output:", self.audio_device_combo)
         form_layout.addRow("Volume (0.0 - 1.0):", self.volume_spin)
+        form_layout.addRow("Global Scale:", self.scale_spin)
+        form_layout.addRow("Animation Speed:", self.anim_speed_spin)
         
         layout.addLayout(form_layout)
         
@@ -149,6 +163,8 @@ class SettingsDialog(QDialog):
         self.emote_key_input.setText("P")
         self.audio_device_combo.setCurrentIndex(0) # Default
         self.volume_spin.setValue(0.8)
+        self.scale_spin.setValue(1.0)
+        self.anim_speed_spin.setValue(1.0)
         
         # Reset default character to Mambo
         index = self.starting_char_combo.findText("mambo", Qt.MatchFixedString)
@@ -162,6 +178,8 @@ class SettingsDialog(QDialog):
         self.config_data["EmoteKey"] = self.emote_key_input.text().upper()
         self.config_data["AudioDevice"] = self.audio_device_combo.currentText()
         self.config_data["Volume"] = self.volume_spin.value()
+        self.config_data["Scale"] = self.scale_spin.value()
+        self.config_data["AnimationSpeed"] = self.anim_speed_spin.value()
 
         try:
             with open(self.config_path, 'w') as f:
