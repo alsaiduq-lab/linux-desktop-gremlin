@@ -8,6 +8,22 @@ from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QIcon
 from PySide6.QtMultimedia import QMediaDevices, QAudioDevice
+from pathlib import Path
+
+# Import path resolution logic
+import sys
+import os
+
+# Ensure project root is in path so we can import 'src' package
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+try:
+    from src.configs_loader import GREMLIN_DIRS, _resolve_char_path, ResourceType
+except ImportError:
+    # Fallback if running from root as 'python -m src.picker'
+    from .configs_loader import GREMLIN_DIRS, _resolve_char_path, ResourceType
 
 # =================================================================================
 # CLASS: SettingsDialog (Global Config)
@@ -138,13 +154,23 @@ class SettingsDialog(QDialog):
         self.setStyleSheet(style)
 
     def populate_chars(self):
+        found_chars = set()
+        
+        # 1. Check Bundled Gremlin Dirs
+        for directory in GREMLIN_DIRS:
+            if directory.exists():
+                for item in directory.iterdir():
+                    if item.is_dir():
+                        found_chars.add(item.name)
+
+        # 2. Check Legacy Spritesheet Dir
         spritesheet_dir = os.path.join(self.project_root, "spritesheet")
         if os.path.exists(spritesheet_dir):
-            gremlins = sorted([
-                d for d in os.listdir(spritesheet_dir) 
-                if os.path.isdir(os.path.join(spritesheet_dir, d))
-            ])
-            self.starting_char_combo.addItems(gremlins)
+            for d in os.listdir(spritesheet_dir):
+                if os.path.isdir(os.path.join(spritesheet_dir, d)):
+                    found_chars.add(d)
+        
+        self.starting_char_combo.addItems(sorted(list(found_chars)))
 
     def load_config(self):
         if os.path.exists(self.config_path):
@@ -197,7 +223,14 @@ class EmoteConfigDialog(QDialog):
         self.setWindowTitle(f"Emote Config: {character_name}")
         self.setFixedSize(400, 300)
         self.character_name = character_name
-        self.config_path = os.path.join(project_root, "spritesheet", character_name, "emote-config.json")
+        
+        # Use new resolution logic
+        root_path, is_bundled = _resolve_char_path(character_name)
+        if is_bundled:
+            self.config_path = str(root_path / "sprites" / "emote-config.json")
+        else:
+            self.config_path = os.path.join(project_root, "spritesheet", character_name, "emote-config.json")
+            
         self.config_data = {}
 
         layout = QVBoxLayout(self)
@@ -422,8 +455,22 @@ class GremlinPicker(QWidget):
         dialog.exec()
 
     def populate_list(self):
-        spritesheet_dir = os.path.join(self.project_root, "spritesheet")
+        found_chars = set()
         
+        # 1. Check Bundled Gremlin Dirs
+        for directory in GREMLIN_DIRS:
+            if directory.exists():
+                for item in directory.iterdir():
+                    if item.is_dir():
+                        found_chars.add(item.name)
+
+        # 2. Check Legacy Spritesheet Dir
+        spritesheet_dir = os.path.join(self.project_root, "spritesheet")
+        if os.path.exists(spritesheet_dir):
+            for d in os.listdir(spritesheet_dir):
+                if os.path.isdir(os.path.join(spritesheet_dir, d)):
+                    found_chars.add(d)
+
         # Load config to find default char
         default_char = ""
         if os.path.exists(self.config_path):
@@ -434,20 +481,15 @@ class GremlinPicker(QWidget):
             except:
                 pass
 
-        if os.path.exists(spritesheet_dir):
-            gremlins = sorted([
-                d for d in os.listdir(spritesheet_dir) 
-                if os.path.isdir(os.path.join(spritesheet_dir, d))
-            ])
-            for g in gremlins:
-                item = self.list_widget.addItem(g)
-                # Select if it matches default
-                if g == default_char:
-                    # We need to find the item we just added to select it
-                    # QListWidget.addItem returns None in PySide6 usually, so we access by row
-                    row = self.list_widget.count() - 1
-                    self.list_widget.setCurrentRow(row)
-                    self.update_preview(default_char)
+        for g in sorted(list(found_chars)):
+            item = self.list_widget.addItem(g)
+            # Select if it matches default
+            if g == default_char:
+                # We need to find the item we just added to select it
+                # QListWidget.addItem returns None in PySide6 usually, so we access by row
+                row = self.list_widget.count() - 1
+                self.list_widget.setCurrentRow(row)
+                self.update_preview(default_char)
                 
     def on_selection_changed(self, current, previous):
         if not current:
@@ -457,10 +499,17 @@ class GremlinPicker(QWidget):
         self.update_preview(name)
 
     def update_preview(self, name):
-        base_path = os.path.join(self.project_root, "spritesheet", name)
-        config_path = os.path.join(base_path, "sprite-map.json")
+        # Use new resolution logic
+        root_path, is_bundled = _resolve_char_path(name)
         
-        if not os.path.exists(config_path):
+        if is_bundled:
+             config_path = root_path / "sprites" / "sprite-map.json"
+             base_img_path = root_path / "sprites"
+        else:
+             config_path = Path(self.project_root) / "spritesheet" / name / "sprite-map.json"
+             base_img_path = Path(self.project_root) / "spritesheet" / name
+        
+        if not config_path.exists():
             self.preview_label.setText("No config found")
             self.preview_label.setPixmap(QPixmap())
             return
@@ -479,13 +528,13 @@ class GremlinPicker(QWidget):
                  self.preview_label.setText("No idle image defined")
                  return
 
-            image_path = os.path.join(base_path, image_name)
-            if not os.path.exists(image_path):
+            image_path = base_img_path / image_name
+            if not image_path.exists():
                 self.preview_label.setText("Image file missing")
                 return
 
             # Load and crop
-            full_pixmap = QPixmap(image_path)
+            full_pixmap = QPixmap(str(image_path))
             if full_pixmap.isNull():
                 self.preview_label.setText("Failed to load image")
                 return
