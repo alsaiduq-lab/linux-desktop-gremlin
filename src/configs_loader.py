@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 from enum import Enum
+from pathlib import Path
 
 from .resources import AnimationData, ResourceRegistry, SoundData, SpriteProperties
 from .settings import EmotePreferences, HotspotSettings, Preferences
@@ -10,6 +11,11 @@ from .states import Direction, State, to_pascal_case
 CODE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(CODE_DIR)
 
+# Define search paths for gremlins (Priority: User Data > Project Bundled > Legacy)
+GREMLIN_DIRS = [
+    Path(os.path.expanduser("~/.local/share/linux-desktop-gremlin/gremlins")),
+    Path(BASE_DIR) / "gremlins",
+]
 
 def load_resources_and_preferences(char: str | None = None):
     """
@@ -55,11 +61,41 @@ class ResourceType(Enum):
     SOUND = "sounds"
 
 
+def _resolve_char_path(char_name: str) -> tuple[Path, bool]:
+    """
+    Finds the root directory for a character.
+    Returns: (path, is_bundled_format)
+    """
+    # 1. Check new "Bundled" locations
+    for directory in GREMLIN_DIRS:
+        char_path = directory / char_name.lower()
+        if char_path.exists() and char_path.is_dir():
+            return char_path, True
+
+    # 2. Fallback to Legacy (Split) format in project root
+    # We return BASE_DIR because legacy paths are constructed relative to it
+    return Path(BASE_DIR), False
+
+
 def _get_char_file(char_name: str, resource: ResourceType, file_name: str) -> str:
-    ans = os.path.join(BASE_DIR, resource.value, char_name.lower(), file_name)
-    if not os.path.exists(ans) or not os.path.isfile(ans):
+    root_path, is_bundled = _resolve_char_path(char_name)
+    
+    if is_bundled:
+        # Bundled Format:
+        # root/sprites/file.png
+        # root/sounds/file.wav
+        subfolder = "sprites" if resource == ResourceType.SPRITESHEET else "sounds"
+        ans = root_path / subfolder / file_name
+    else:
+        # Legacy Format:
+        # BASE_DIR/spritesheet/char/file.png
+        # BASE_DIR/sounds/char/file.wav
+        ans = root_path / resource.value / char_name.lower() / file_name
+
+    if not ans.exists() or not ans.is_file():
         raise FileNotFoundError(f"Missing required file: {ans}")
-    return ans
+        
+    return str(ans)
 
 
 def _load_json(filepath: str) -> dict:
