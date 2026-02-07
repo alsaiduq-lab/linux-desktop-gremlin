@@ -42,10 +42,31 @@ Follow these steps to get your gremlins up and running!
 - 2025-11-15: Remapped headpats from Left Click to Right Click. No more accidental pats when you want to drag them around!
 </details>
 
-
 # Some differences between this and KurtVelasco's Desktop Gremlins
 
 This is not a strict 1:1 port, because I made some changes to the animation flow to better match my own preferences. I also created a few additional spritesheets; please feel free to use them if they're helpful.
+
+# The Gremlin Hall of Fame ❤️
+
+Starting 2026-02-08, assets have been move to release tags, which means contributors who submit assets via PRs would no longer appear in the GitHub contributors list 😢.
+
+Therefore, if you'd like to contribute a new gremlin, please make two Pull Requests:
+1. **The asset PR:** Submit your new asset to the `./gremlins` directory.
+2. **The Credit PR:** Add yourself to the glorious table below so the world knows of your deeds!
+
+| Gremlin Asset         | Contributor                                                   |
+| :-------------------- | :------------------------------------------------------------ |
+| Agnes Tachyon         | [@TRKako](https://github.com/TRKako)                          |
+| Manhattan Cafe        | [@TRKako](https://github.com/TRKako)                          |
+| Gold Ship             | [@TRKako](https://github.com/TRKako)                          |
+| Haru Urara            | [@TRKako](https://github.com/TRKako)                          |
+| Tachibana Hikari      | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
+| Meisho Doto           | [@TRKako](https://github.com/TRKako)                          |
+| Oguri Cap             | [@TRKako](https://github.com/TRKako)                          |
+| T.M. Opera O          | [@TRKako](https://github.com/TRKako)                          |
+| Speaki                | [@Quicksilver151](https://github.com/Quicksilver151)          |
+
+A massive, heartfelt thank you to our incredible asset contributors!
 
 # Try other forks!
 
