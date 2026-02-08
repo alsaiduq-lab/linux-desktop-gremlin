@@ -51,7 +51,7 @@ This is not a strict 1:1 port, because I made some changes to the animation flow
 Starting 2026-02-08, assets have been move to release tags, which means contributors who submit assets via PRs would no longer appear in the GitHub contributors list 😢.
 
 Therefore, if you'd like to contribute a new gremlin, please make two Pull Requests:
-1. **The asset PR:** Submit your new asset to the `./gremlins` directory.
+1. **The Asset PR:** Submit your new asset to the `./gremlins` directory. This PR won't be merged, but it'll send me the asset.
 2. **The Credit PR:** Add yourself to the glorious table below so the world knows of your deeds!
 
 | Gremlin Asset         | Contributor                                                   |
