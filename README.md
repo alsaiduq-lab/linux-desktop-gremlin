@@ -60,10 +60,11 @@ Therefore, if you'd like to contribute a new gremlin, please make two Pull Reque
 | Manhattan Cafe        | [@TRKako](https://github.com/TRKako)                          |
 | Gold Ship             | [@TRKako](https://github.com/TRKako)                          |
 | Haru Urara            | [@TRKako](https://github.com/TRKako)                          |
-| Tachibana Hikari      | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
 | Meisho Doto           | [@TRKako](https://github.com/TRKako)                          |
 | Oguri Cap             | [@TRKako](https://github.com/TRKako)                          |
 | T.M. Opera O          | [@TRKako](https://github.com/TRKako)                          |
+| Tachibana Hikari      | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
+| Kurosaki Koyuki       | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
 | Speaki                | [@Quicksilver151](https://github.com/Quicksilver151)          |
 
 A massive, heartfelt thank you to our incredible asset contributors!
@@ -73,4 +74,3 @@ A massive, heartfelt thank you to our incredible asset contributors!
 There are some forks of this repository that you may want to checkout!
 
 - [#23](https://github.com/iluvgirlswithglasses/linux-desktop-gremlin/pull/23): Significantly reduces memory usage of the app, though some functionalities will be different.
-
