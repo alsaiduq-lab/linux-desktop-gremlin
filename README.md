@@ -19,7 +19,21 @@ https://github.com/user-attachments/assets/eeb75510-9725-4f3a-a259-0959ddc22603
 
 # Install and customize! 🚀
 
-Follow these steps to get your gremlins up and running!
+## 1. Quick Guide
+
+1. Run install script:
+
+```sh
+curl -s https://raw.githubusercontent.com/iluvgirlswithglasses/linux-desktop-gremlin/refs/heads/main/install.sh | bash
+```
+
+2. Call the gremlins from your app launcher!
+
+<img width="1003" height="500" alt="ss-app_launcher" src="https://github.com/user-attachments/assets/fee960dc-c983-424d-8649-23c4b40d1293" />
+
+## 2. Extended Guide
+
+Wanna understand how things work, tweak details, or install on a setup where the install script can't automate everything? Follow these steps to get your gremlins up and running exactly the way you want:
 
 + [1. Configure your compositor](./docs/01-configure-compositor.md)
 + [2. Install this repository](./docs/02-install.md)
