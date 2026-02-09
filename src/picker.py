@@ -390,7 +390,7 @@ class GremlinPicker(QWidget):
         self.launch_btn.clicked.connect(self.launch_gremlin)
         self.launch_btn.setCursor(Qt.PointingHandCursor)
         
-        self.download_btn = QPushButton("Download")
+        self.download_btn = QPushButton("Download Gremlin")
         self.download_btn.clicked.connect(self.open_downloader)
         self.download_btn.setCursor(Qt.PointingHandCursor)
         self.download_btn.setStyleSheet("""
